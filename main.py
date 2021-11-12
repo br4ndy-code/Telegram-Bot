@@ -25,7 +25,7 @@ def text(message):
         elif message.text == 'Help':
             bot.send_message(message.chat.id, 'This bot was developed just for fun by br4ndy-code!')
         else:
-            bot.send.message(message.chat.id, 'Sorry, I didn\'t understand you :(')
+            bot.send_message(message.chat.id, 'Sorry, I didn\'t understand you :(')
 
 
 bot.polling(none_stop=True)
