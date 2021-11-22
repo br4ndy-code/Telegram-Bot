@@ -1,35 +1,16 @@
-import telebot
-import config
-from telebot import types
+import logging
 
-bot = telebot.TeleBot(config.TOKEN)
+from aiogram import Bot, Dispatcher, executor, types
+from config import BOT_TOKEN
 
+logging.basicConfig(level=logging.INFO)
+bot = Bot(BOT_TOKEN)
+dp = Dispatcher(bot)
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    sticker = open('sticker.webp', 'rb')
-    bot.send_sticker(message.chat.id, sticker)
-    # keyboard
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton('Settings')
-    btn2 = types.KeyboardButton('Help')
-    btn3 = types.KeyboardButton('Rules')
-    markup.add(btn1, btn2, btn3)
+@dp.message_handler()
+async def echo(message: types.Message):
+    await message.answer(message.text)
+    
 
-    bot.send_message(message.chat.id, 'Welcome!', reply_markup=markup)
-
-
-@bot.message_handler(content_types=['text'])
-def text(message):
-    if message.chat.type == 'private':
-        if message.text == 'Settings':
-            bot.send_message(message.chat.id, 'There will be settings in future')
-        elif message.text == 'Help':
-            bot.send_message(message.chat.id, 'This bot was developed just for fun by br4ndy-code!')
-        elif message.text == 'Rules':
-            bot.send_message(message.chat.id, 'There will be our rules')
-        else:
-            bot.send_message(message.chat.id, 'Something went wrong')
-
-
-bot.polling(none_stop=True)
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
